@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-gray-100 p-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-3xl font-bold">My Workouts</h1>
+
+        <p class="text-gray-500">Track and manage your workouts</p>
+      </div>
+
+      <button mat-raised-button color="primary" routerLink="/workouts/new">Add Workout</button>
+    </div>
+
+    @if (workouts().length === 0) {
+      <mat-card class="p-6 text-center">
+        <p class="text-gray-500">No workouts found.</p>
+      </mat-card>
+    }
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      @for (workout of workouts(); track workout.id) {
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              {{ getWorkoutType(workout.type) }}
+            </mat-card-title>
+
+            <mat-card-subtitle>
+              {{ workout.dateTime | date: 'medium' }}
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content class="pt-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500">Duration</p>
+
+                <p class="font-semibold">{{ workout.durationMinutes }} min</p>
+              </div>
+
+              <div>
+                <p class="text-sm text-gray-500">Calories</p>
+
+                <p class="font-semibold">{{ workout.caloriesBurned }} kcal</p>
+              </div>
+
+              <div>
+                <p class="text-sm text-gray-500">Intensity</p>
+
+                <p class="font-semibold">{{ workout.intensityLevel }}/10</p>
+              </div>
+
+              <div>
+                <p class="text-sm text-gray-500">Fatigue</p>
+
+                <p class="font-semibold">{{ workout.fatigueLevel }}/10</p>
+              </div>
+            </div>
+
+            @if (workout.notes) {
+              <div class="mt-4">
+                <p class="text-sm text-gray-500">Notes</p>
+
+                <p>
+                  {{ workout.notes }}
+                </p>
+              </div>
+            }
+          </mat-card-content>
+          <mat-card-actions class="justify-end gap-2">
+            <button mat-button type="button" (click)="editWorkout(workout.id)">Edit</button>
+
+            <button mat-button color="warn" type="button" (click)="deleteWorkout(workout.id)">
+              Delete
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  </div>
+</div>

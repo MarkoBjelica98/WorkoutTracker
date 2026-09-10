@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-gray-100 p-6">
+  <div class="max-w-2xl mx-auto">
+    <mat-card class="p-4">
+      <mat-card-header class="mb-6">
+        <mat-card-title class="text-2xl font-bold">
+          {{ isEditMode ? 'Edit Workout' : 'Add Workout' }}
+        </mat-card-title>
+
+        <mat-card-subtitle> Record your workout details </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Workout Type</mat-label>
+
+            <mat-select formControlName="type">
+              <mat-option [value]="0"> Cardio </mat-option>
+
+              <mat-option [value]="1"> Strength </mat-option>
+
+              <mat-option [value]="2"> Flexibility </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Date and Time</mat-label>
+
+            <input matInput type="datetime-local" formControlName="dateTime" [max]="maxDateTime" />
+
+            @if (
+              workoutForm.controls.dateTime.touched &&
+              workoutForm.controls.dateTime.hasError('required')
+            ) {
+              <mat-error> Date and time is required. </mat-error>
+            }
+
+            @if (workoutForm.controls.dateTime.hasError('futureDate')) {
+              <mat-error> Workout date and time cannot be in the future. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Duration (minutes)</mat-label>
+
+            <input matInput type="number" formControlName="durationMinutes" />
+
+            @if (
+              workoutForm.controls.durationMinutes.touched &&
+              workoutForm.controls.durationMinutes.hasError('min')
+            ) {
+              <mat-error> Duration must be greater than 0. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Calories Burned</mat-label>
+
+            <input matInput type="number" formControlName="caloriesBurned" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Intensity (1–10)</mat-label>
+
+            <input matInput type="number" min="1" max="10" formControlName="intensityLevel" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Fatigue (1–10)</mat-label>
+
+            <input matInput type="number" min="1" max="10" formControlName="fatigueLevel" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Notes</mat-label>
+
+            <textarea
+              matInput
+              rows="4"
+              formControlName="notes"
+              placeholder="Optional notes..."
+            ></textarea>
+          </mat-form-field>
+
+          <div class="flex justify-end gap-3">
+            <button mat-button type="button" (click)="cancel()">Cancel</button>
+
+            <button mat-raised-button color="primary" type="submit">
+              {{ isEditMode ? 'Save Changes' : 'Add Workout' }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
